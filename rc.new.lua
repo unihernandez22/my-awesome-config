@@ -453,10 +453,6 @@ root.keys(globalkeys)
 -- Rules to apply to new clients (through the "manage" signal).
 awful.rules.rules = {
     -- All clients will match this rule.
-	{rule_any = { 
-		class = { "tilix", "Tilix" },
-	},
-	properties = {opacity=0.9}},
     { rule = { },
       properties = { -- opacity = 0.75,
 		  			 border_width = beautiful.border_width,
@@ -510,6 +506,11 @@ awful.rules.rules = {
                 size_hints_honor = false
       }
     },
+	-- Semi-transparent terminal
+	{rule_any = { 
+		class = { "tilix", "Tilix" },
+	},
+	properties = {opacity=0.9}},
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },
