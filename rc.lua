@@ -18,6 +18,8 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
+local config = require("config")
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -47,10 +49,6 @@ end
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_configuration_dir() .. "themes/custom/theme.lua")
 
--- This is used later as the default terminal and editor to run.
-terminal = "termite"
-editor = os.getenv("EDITOR") or "vim"
-editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -79,6 +77,10 @@ awful.layout.layouts = {
     -- awful.layout.suit.corner.se,
 }
 -- }}}
+
+terminal = config.terminal
+editor = config.editor
+editor_cmd = config.editor_cmd
 
 -- {{{ Menu
 -- Create a launcher widget and a main menu
@@ -498,16 +500,12 @@ awful.rules.rules = {
         }
       }, properties = { floating = true }},
 
-    -- Add titlebars to normal clients and dialogs
-	-- { rule_any = {type = { "normal", "dialog" }
-    --   }, properties = { titlebars_enabled = true }
-    -- },
     { rule_any = {type = { "normal", "dialog" }
       }, properties = { titlebars_enabled = false, -- remove titlebars
                 size_hints_honor = false
       }
     },
-	  -- Semi-transparent terminal
+
 	  { rule_any = { 
 	  	class = { "ulauncher", "Ulauncher" },
 	  },
@@ -583,10 +581,12 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
+-- Remove borders when maximized ~~ TODO: Fix
 client.connect_signal("property::maximized", function(c) 
     c.border_width = c.maximized and 0 or beautiful.border_width
 end)
 
+-- Fix fullscreen
 client.connect_signal("property::fullscreen", function(c)
   if c.fullscreen then
     gears.timer.delayed_call(function()
