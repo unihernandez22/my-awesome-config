@@ -45,10 +45,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
--- beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
--- beautiful.init(gears.filesystem.get_themes_dir() .. "gtk/theme.lua")
--- beautiful.init("/home/unai/.config/awesome/themes/default/theme.lua")
-beautiful.init("/home/unai/.config/awesome/themes/gtk/theme.lua")
+beautiful.init(gears.filesystem.get_configuration_dir() .. "themes/custom/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "termite"
@@ -151,10 +148,7 @@ local tasklist_buttons = gears.table.join(
                      awful.button({ }, 5, function ()
                                               awful.client.focus.byidx(-1)
                                           end))
--- beautiful.wallpaper = "/usr/share/backgrounds/wallpaper.jpg"
--- beautiful.wallpaper = "/home/unai/.config/awesome/mountains_wallpaper.jpg"
-beautiful.useless_gap = 5
--- beautiful.wallpaper = "/home/unai/Pictures/bridge-wallpaper.jpg"
+
 local function set_wallpaper(s)
     -- Wallpaper
     if beautiful.wallpaper then
@@ -338,8 +332,8 @@ globalkeys = gears.table.join(
               end,
               {description = "lua execute prompt", group = "awesome"}),
     -- Menubar
-    -- awful.key({ modkey }, "p", function() menubar.show() end,
-    --           {description = "show the menubar", group = "launcher"})
+    awful.key({ modkey, "Shift" }, "p", function() menubar.show() end,
+              {description = "show the menubar", group = "launcher"}),
     awful.key({ modkey }, "p", function() awful.util.spawn("ulauncher") end,
               {description = "show the menubar", group = "launcher"})
 )
@@ -602,8 +596,3 @@ client.connect_signal("property::fullscreen", function(c)
     end)
   end
 end)
-
--- awful.util.spawn("picom -b --config /home/unai/.picom.conf")
--- awful.util.spawn("picom -b")
--- awful.util.spawn("~/.config/awesome/autorun.sh")
--- awful.spawn.with_shell("~/.config/awesome/autorun.sh")

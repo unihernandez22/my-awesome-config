@@ -10,8 +10,6 @@ local themes_path = gfs.get_themes_dir()
 local gears_shape = require("gears.shape")
 local wibox = require("wibox")
 local awful_widget_clienticon = require("awful.widget.clienticon")
-local gtk = require("beautiful.gtk")
-
 
 -- Helper functions for modifying hex colors:
 --
@@ -84,50 +82,35 @@ end
 
 -- inherit xresources theme:
 local theme = dofile(themes_path.."xresources/theme.lua")
--- load and prepare for use gtk theme:
-theme.gtk = gtk.get_theme_variables()
-if not theme.gtk then
-    local gears_debug = require("gears.debug")
-    gears_debug.print_warning("Can't load GTK+3 theme. Using 'xresources' theme as a fallback.")
-    return theme
-end
-theme.gtk.button_border_radius = dpi(theme.gtk.button_border_radius or 0)
-theme.gtk.button_border_width = dpi(theme.gtk.button_border_width or 1)
-theme.gtk.bold_font = theme.gtk.font_family .. ' Bold ' .. '8' -- theme.gtk.font_size
-theme.gtk.menubar_border_color = mix(
-    theme.gtk.menubar_bg_color,
-    theme.gtk.menubar_fg_color,
-    0.7
-)
 
+-- theme.font          = 'Cantarell 8'
+theme.font          = 'FiraCode 8'
 
-theme.font          = theme.gtk.font_family .. ' ' .. '8' -- theme.gtk.font_size
+theme.bg_normal     = '#383c4aff'
+theme.fg_normal     = '#d3dae3ff'
 
-theme.bg_normal     = theme.gtk.bg_color
-theme.fg_normal     = theme.gtk.fg_color
+theme.wibar_bg      = '#2f343fff'
+theme.wibar_fg      = '#cfdae7cc'
 
-theme.wibar_bg      = theme.gtk.menubar_bg_color
-theme.wibar_fg      = theme.gtk.menubar_fg_color
+theme.bg_focus      = '#5294e2ff'
+theme.fg_focus      = '#ffffffff'
 
-theme.bg_focus      = theme.gtk.selected_bg_color
-theme.fg_focus      = theme.gtk.selected_fg_color
-
-theme.bg_urgent     = theme.gtk.error_bg_color
-theme.fg_urgent     = theme.gtk.error_fg_color
+theme.bg_urgent     = '#f04a50ff'
+theme.fg_urgent     = '#ffffffff'
 
 theme.bg_minimize   = mix(theme.wibar_fg, theme.wibar_bg, 0.3)
 theme.fg_minimize   = mix(theme.wibar_fg, theme.wibar_bg, 0.9)
 
 theme.bg_systray    = theme.wibar_bg
 
-theme.border_normal = theme.gtk.wm_border_unfocused_color
-theme.border_focus  = theme.gtk.wm_border_focused_color
-theme.border_marked = theme.gtk.success_color
+theme.border_normal = '#2f343fff'
+theme.border_focus  = '#5294e2ff'
+theme.border_marked = '#73d216ff'
 
-theme.border_width  = dpi(theme.gtk.button_border_width or 1)
-theme.border_radius = theme.gtk.button_border_radius
+theme.border_width  = dpi(1)
+theme.border_radius = 3
 
-theme.useless_gap   = dpi(3)
+theme.useless_gap = 5
 
 local rounded_rect_shape = function(cr,w,h)
     gears_shape.rounded_rect(
@@ -149,7 +132,8 @@ theme.tasklist_bg_normal = theme.wibar_bg
 theme.tasklist_fg_focus = theme.tasklist_fg_normal
 theme.tasklist_bg_focus = theme.tasklist_bg_normal
 
-theme.tasklist_font_focus = theme.gtk.bold_font
+-- theme.tasklist_font_focus = 'Cantarell Bold 8'
+theme.tasklist_font_focus = 'FiraCode Bold 8'
 
 theme.tasklist_shape_minimized = rounded_rect_shape
 theme.tasklist_shape_border_color_minimized = mix(
@@ -157,9 +141,9 @@ theme.tasklist_shape_border_color_minimized = mix(
     theme.fg_minimize,
     0.85
 )
-theme.tasklist_shape_border_width_minimized = theme.gtk.button_border_width
+theme.tasklist_shape_border_width_minimized = 1
 
-theme.tasklist_spacing = theme.gtk.button_border_width
+theme.tasklist_spacing = 1
 
 --[[ Advanced taglist and tasklist styling: {{{
 
@@ -226,55 +210,45 @@ theme.tasklist_widget_template = {
 
 theme.taglist_shape_container = rounded_rect_shape
 theme.taglist_shape_clip_container = true
-theme.taglist_shape_border_width_container = theme.gtk.button_border_width * 2
-theme.taglist_shape_border_color_container = theme.gtk.header_button_border_color
+theme.taglist_shape_border_width_container = 2
+theme.taglist_shape_border_color_container = '#2f343f00'
 -- }}}
 
-theme.taglist_bg_occupied = theme.gtk.header_button_bg_color
-theme.taglist_fg_occupied = theme.gtk.header_button_fg_color
+theme.taglist_bg_occupied = '#2f343f00'
+theme.taglist_fg_occupied = '#cfdae7cc'
 
 theme.taglist_bg_empty = mix(
-    theme.gtk.menubar_bg_color,
-    theme.gtk.header_button_bg_color,
+    '#2f343fff',
+    '#2f343f00',
     0.3
 )
 theme.taglist_fg_empty = mix(
-    theme.gtk.menubar_bg_color,
-    theme.gtk.header_button_fg_color
+    '#2f343fff',
+    '#cfdae7cc'
 )
 
-theme.titlebar_font_normal = theme.gtk.bold_font
-theme.titlebar_bg_normal = theme.gtk.wm_border_unfocused_color
-theme.titlebar_fg_normal = theme.gtk.wm_title_unfocused_color
---theme.titlebar_fg_normal = choose_contrast_color(
-    --theme.titlebar_bg_normal,
-    --theme.gtk.menubar_fg_color,
-    --theme.gtk.menubar_bg_color
---)
+-- theme.titlebar_font_normal = 'Cantarell Bold 8'
+theme.titlebar_font_normal = 'FiraCode Bold 8'
+theme.titlebar_bg_normal = '#2f343fff'
+theme.titlebar_fg_normal = '#cfdae7cc'
 
-theme.titlebar_font_focus = theme.gtk.bold_font
-theme.titlebar_bg_focus = theme.gtk.wm_border_focused_color
-theme.titlebar_fg_focus = theme.gtk.wm_title_focused_color
---theme.titlebar_fg_focus = choose_contrast_color(
-    --theme.titlebar_bg_focus,
-    --theme.gtk.menubar_fg_color,
-    --theme.gtk.menubar_bg_color
---)
+-- theme.titlebar_font_focus = 'Cantarell Bold 8'
+theme.titlebar_font_focus = 'FiraCode Bold 8'
+theme.titlebar_bg_focus = '#5294e2ff'
+theme.titlebar_fg_focus = '#ffffffff'
 
-theme.tooltip_fg = theme.gtk.tooltip_fg_color
-theme.tooltip_bg = theme.gtk.tooltip_bg_color
+theme.tooltip_fg = '#d3dae3ff'
+theme.tooltip_bg = '#383c4aff'
 
 -- Variables set for theming the menu:
 -- menu_[bg|fg]_[normal|focus]
 -- menu_[border_color|border_width]
 
-theme.menu_border_width = theme.gtk.button_border_width
-theme.menu_border_color = theme.gtk.menubar_border_color
-theme.menu_bg_normal = theme.gtk.menubar_bg_color
-theme.menu_fg_normal = theme.gtk.menubar_fg_color
+theme.menu_border_width = 1
+theme.menu_border_color = '#5f6672'
+theme.menu_bg_normal = '#2f343fff'
+theme.menu_fg_normal = '#cfdae7cc'
 
--- @TODO: get from gtk menu height
--- theme.menu_height = dpi(24)
 theme.menu_height = dpi(20)
 theme.menu_width  = dpi(150)
 theme.menu_submenu_icon = nil
@@ -298,7 +272,7 @@ theme = theme_assets.recolor_titlebar(
     theme, reduce_contrast(theme.titlebar_fg_normal, 50), "normal", "hover"
 )
 theme = theme_assets.recolor_titlebar(
-    theme, theme.gtk.error_bg_color, "normal", "press"
+    theme, '#f04a50ff', "normal", "press"
 )
 theme = theme_assets.recolor_titlebar(
     theme, theme.titlebar_fg_focus, "focus"
@@ -307,47 +281,21 @@ theme = theme_assets.recolor_titlebar(
     theme, reduce_contrast(theme.titlebar_fg_focus, 50), "focus", "hover"
 )
 theme = theme_assets.recolor_titlebar(
-    theme, theme.gtk.error_bg_color, "focus", "press"
+    theme, '#f04a50ff', "focus", "press"
 )
 
 -- Define the icon theme for application icons. If not set then the icons
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
-theme.icon_theme = nil
+theme.icon_theme = 'Papirus-Dark'
 
 -- Generate Awesome icon:
 theme.awesome_icon = theme_assets.awesome_icon(
     theme.menu_height, mix(theme.bg_focus, theme.fg_normal), theme.wibar_bg
 )
 
--- Generate taglist squares:
---local taglist_square_size = dpi(4)
---theme.taglist_squares_sel = theme_assets.taglist_squares_sel(
-    --taglist_square_size, theme.gtk.header_button_border_color
---)
---theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
-    --taglist_square_size, theme.gtk.header_button_border_color
---)
--- Or disable them:
 theme.taglist_squares_sel = nil
 theme.taglist_squares_unsel = nil
 
--- Generate wallpaper:
--- local wallpaper_bg = theme.gtk.base_color
--- local wallpaper_fg = theme.gtk.bg_color
--- local wallpaper_alt_fg = theme.gtk.selected_bg_color
--- if not is_dark(theme.bg_normal) then
---     wallpaper_bg, wallpaper_fg = wallpaper_fg, wallpaper_bg
--- end
--- wallpaper_bg = reduce_contrast(wallpaper_bg, 50)
--- wallpaper_fg = reduce_contrast(wallpaper_fg, 30)
--- wallpaper_fg = mix(wallpaper_fg, wallpaper_bg, 0.4)
--- wallpaper_alt_fg = mix(wallpaper_alt_fg, wallpaper_fg, 0.4)
--- theme.wallpaper = function(s)
---     return theme_assets.wallpaper(wallpaper_bg, wallpaper_fg, wallpaper_alt_fg, s)
--- end
-
-theme.wallpaper = "/home/unai/Pictures/bridge-wallpaper.jpg"
+theme.wallpaper = gfs.get_configuration_dir() .. "bridge-wallpaper.jpg"
 
 return theme
-
--- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80:foldmethod=marker
