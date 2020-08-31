@@ -45,10 +45,13 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+-- beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+-- beautiful.init(gears.filesystem.get_themes_dir() .. "gtk/theme.lua")
+-- beautiful.init("/home/unai/.config/awesome/themes/default/theme.lua")
+beautiful.init("/home/unai/.config/awesome/themes/gtk/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "tilix"
+terminal = "termite"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -149,7 +152,9 @@ local tasklist_buttons = gears.table.join(
                                               awful.client.focus.byidx(-1)
                                           end))
 -- beautiful.wallpaper = "/usr/share/backgrounds/wallpaper.jpg"
-beautiful.wallpaper = "/home/unai/.config/awesome/mountains_wallpaper.jpg"
+-- beautiful.wallpaper = "/home/unai/.config/awesome/mountains_wallpaper.jpg"
+beautiful.useless_gap = 5
+-- beautiful.wallpaper = "/home/unai/Pictures/bridge-wallpaper.jpg"
 local function set_wallpaper(s)
     -- Wallpaper
     if beautiful.wallpaper then
@@ -231,11 +236,11 @@ root.buttons(gears.table.join(
 -- {{{ Key bindings
 globalkeys = gears.table.join(
     -- Mine
-    awful.key({ }, "Print", function () awful.util.spawn("deepin-screenshot", false) end),
+    awful.key({ }, "Print", function () awful.util.spawn("flameshot gui", false) end),
 	awful.key({ }, "#122", function () awful.util.spawn("amixer sset Master 5%-") end),
 	awful.key({ }, "#123", function () awful.util.spawn("amixer sset Master 5%+") end),
-	awful.key({ }, "#232", function () awful.spawn.with_shell("xbacklight -dec 10") end),
-	awful.key({ }, "#233", function () awful.spawn.with_shell("xbacklight -inc 10") end),
+	awful.key({ }, "#232", function () awful.spawn.with_shell("xbacklight -dec 5") end),
+	awful.key({ }, "#233", function () awful.spawn.with_shell("xbacklight -inc 5") end),
     -- Default
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
@@ -581,6 +586,20 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
+
+client.connect_signal("property::maximized", function(c) 
+    c.border_width = c.maximized and 0 or beautiful.border_width
+end)
+
+client.connect_signal("property::fullscreen", function(c)
+  if c.fullscreen then
+    gears.timer.delayed_call(function()
+      if c.valid then
+        c:geometry(c.screen.geometry)
+      end
+    end)
+  end
+end)
 
 -- awful.util.spawn("picom -b --config /home/unai/.picom.conf")
 -- awful.util.spawn("picom -b")
