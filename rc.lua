@@ -338,7 +338,9 @@ globalkeys = gears.table.join(
               end,
               {description = "lua execute prompt", group = "awesome"}),
     -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end,
+    -- awful.key({ modkey }, "p", function() menubar.show() end,
+    --           {description = "show the menubar", group = "launcher"})
+    awful.key({ modkey }, "p", function() awful.util.spawn("ulauncher") end,
               {description = "show the menubar", group = "launcher"})
 )
 
@@ -511,11 +513,11 @@ awful.rules.rules = {
                 size_hints_honor = false
       }
     },
-	-- Semi-transparent terminal
-	-- {rule_any = { 
-	-- 	class = { "tilix", "Tilix" },
-	-- },
-	-- properties = {opacity=0.9}},
+	  -- Semi-transparent terminal
+	  { rule_any = { 
+	  	class = { "ulauncher", "Ulauncher" },
+	  },
+	  properties = {border_width = 0} },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },
